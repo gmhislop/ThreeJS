@@ -11,3 +11,8 @@
     left: 0;
     outline: none;
 }
+html,
+body
+{
+    overflow: hidden;
+}

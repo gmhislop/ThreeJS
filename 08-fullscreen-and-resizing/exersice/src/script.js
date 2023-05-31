@@ -31,7 +31,30 @@ window.addEventListener('resize', () =>
     // Update sizes
     sizes.width = window.innerWidth // update width takes the new width of the window
     sizes.height = window.innerHeight // update height takes the new height of the window
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height // update the aspect ratio of the camera
+    camera.updateProjectionMatrix() // update the projection matrix of the camera
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height) // update the size of the renderer
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)) // update the pixel ratio of the renderer
 });    
+
+window.addEventListener('dblclick', () => {
+
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement; // get the fullscreen element
+
+    if (!fullscreenElement) // if the document is not in fullscreen mode
+    {
+        canvas.requestFullscreen(); // request fullscreen mode
+    }
+    else if (document.exitFullscreen) // if the document is in fullscreen mode
+    {
+        document.exitFullscreen(); // exit fullscreen mode
+    }
+});
+   
 
 /**
  * Camera
