@@ -92,7 +92,7 @@ const scene = new THREE.Scene()
 // material.alphaMap = doorAlphaTexture // alpha map is a black and white image
 
 const material = new THREE.MeshStandardMaterial() // this material will show the lights and shadows and will be more realistic
-material.metalness = 0.7 // this property will make the material more metallic
+material.metalness = 0.9 // this property will make the material more metallic
 material.roughness = 0.2 // this property will make the material more rough
 material.envMap = environmentMapTexture // this property will add the environment map to the material
 
@@ -169,9 +169,9 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1
-camera.position.y = 1
-camera.position.z = 2
+camera.position.x = 1 // x axis is horizontal
+camera.position.y = 1 // y axis is height
+camera.position.z = 2 // z axis is depth
 scene.add(camera)
 
 // Controls
