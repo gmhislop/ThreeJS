@@ -32,7 +32,7 @@ fontLoader.load(
     (font) =>
     {
         // Material
-        const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture, wireframe: true })
+        const material = new THREE.MeshMatcapMaterial({  wireframe: true })
         // Text
         const textGeometry = new TextGeometry(
             'Random donuts flying around',
