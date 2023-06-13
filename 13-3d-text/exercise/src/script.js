@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'lil-gui'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 /**
  * Base
@@ -9,25 +11,92 @@ import * as dat from 'lil-gui'
 const gui = new dat.GUI()
 
 // Canvas
-const canvas = document.querySelector('canvas.webgl')
+const canvas = document.querySelector('canvas.webgl') // select canvas
 
 // Scene
-const scene = new THREE.Scene()
+const scene = new THREE.Scene() // create scene
 
+// // Axes helper
+// const axesHelper = new THREE.AxesHelper() // create axes helper
+// scene.add(axesHelper) // add axes helper to scene
 /**
  * Textures
  */
-const textureLoader = new THREE.TextureLoader()
+const textureLoader = new THREE.TextureLoader() // load texture
+const matcapTexture = textureLoader.load('/textures/matcaps/8.png')
 
 /**
- * Object
+ * Fonts
  */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
-)
 
-scene.add(cube)
+const fontLoader = new FontLoader() // load font
+
+fontLoader.load(
+    '/fonts/helvetiker_regular.typeface.json', // path to font
+    (font) => // callback function that is called when the font is loaded
+    {
+        const textGeometry = new TextGeometry(
+            'This is Giovanni Hislop',
+            { // these parameters are optional and generate the font
+                font: font,
+                size: 0.5,
+                height: 0.2,
+                curveSegments: 5, // smoothness of the text
+                bevelEnabled: true, // add bevel a bevel is a 3D effect that makes the text look like it has a 3D edge
+                bevelThickness: 0.03, // how thick the bevel is
+                bevelSize: 0.02, // how far the bevel goes in the shape
+                bevelOffset: 0, // distance from the shape
+                bevelSegments: 4 // number of bevel segments (smoothness)
+            }
+        )
+
+        // this is another way of centering the text but it is not as good as the one below
+        // textGeometry.computeBoundingBox()
+        // textGeometry.translate(
+        //     - (textGeometry.boundingBox.max.x - 0.02) * 0.5, // center the text of the x axis
+        //     - (textGeometry.boundingBox.max.y - 0.02) * 0.5,  // center the text of the y axis
+        //     - (textGeometry.boundingBox.max.z - 0.02) * 0.5 // center the text of the z axis
+        // )
+
+        textGeometry.center()
+
+        // textMaterial.matcap = matcapTexture // other way of defining
+        // textMaterial.wireframe = true // make the material wireframe
+        const material = new THREE.MeshMatcapMaterial( { matcap: matcapTexture })
+        const text = new THREE.Mesh(textGeometry, material) // create a mesh with the text geometry and material
+        scene.add(text) // add the text to the scene
+
+        console.time('donuts')
+        // when outside the loop the geometry is shared between all the donuts and the material is shared between all the donuts this results in a better performance
+        const donutGeometry = new THREE.TorusGeometry( 0.3, 0.2, 20, 40)
+
+        for (let i = 0; i < 100; i++) {
+            const donut = new THREE.Mesh(donutGeometry, material)
+            donut.position.x = (Math.random() - 0.5) * 10 // random number between -0.5 and 0.5
+            donut.position.y = (Math.random() - 0.5) * 10
+            donut.position.z = (Math.random() - 0.5) * 10
+
+            donut.rotation.x = Math.random() * Math.PI
+            donut.rotation.y = Math.random() * Math.PI
+
+            const scale = Math.random() // random number between 0 and 1 called once for each donut but the same for each axis
+            donut.scale.set(scale, scale, scale) // is the same as donut.scale.x = scale, donut.scale.y = scale, donut.scale.z = scale
+
+            scene.add(donut)
+        }
+        console.timeEnd('donuts')
+    }
+)
+ 
+// /**
+//  * Object
+//  */
+// const cube = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial()
+// )
+
+// scene.add(cube)
 
 /**
  * Sizes
