@@ -201,8 +201,8 @@ const tick = () =>
     plane.rotation.y = 0.5 * elapsedTime
     torus.rotation.y = 0.5 * elapsedTime
 
-    sphere.rotation.x = 0.15 * elapsedTime
-    plane.rotation.x = 0.15 * elapsedTime
+    sphere.rotation.x = 0.5 * elapsedTime
+    plane.rotation.x = 0.7 * elapsedTime
     torus.rotation.x = 0.15 * elapsedTime
 
     controls.update()
